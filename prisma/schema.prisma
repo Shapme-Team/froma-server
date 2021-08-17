@@ -10,22 +10,25 @@ datasource db {
 model User {
   id          String   @id @default(cuid())
   name        String?
-  email       String @unique
+  email       String   @unique
   phoneNumber Int
   Addres      Addres[]
   Cart        Cart?
 }
 
 model Cart {
-  id        String    @id @default(cuid())
-  user      User?     @relation(fields: [userId], references: [id])
-  products  Product[]
-  userId    String?
+  id       String    @id @default(cuid())
+  user     User?     @relation(fields: [userId], references: [id])
+  products Product[]
+  userId   String?
 }
 
 model Order {
-   id        String    @id @default(cuid())
-
+  id            String    @id @default(cuid())
+  products      Product[]
+  paymentMethod String
+  order_address Addres?   @relation(fields: [addresId], references: [id])
+  addresId      String?
 }
 
 model Seller {
@@ -57,6 +60,8 @@ model Product {
   sellerId        String?        @map("sellerId")
   Cart            Cart?          @relation(fields: [cartId], references: [id])
   cartId          String?
+  Order           Order?         @relation(fields: [orderId], references: [id])
+  orderId         String?
 }
 
 model Categorie {
@@ -84,4 +89,5 @@ model Addres {
   mainAddress String
   user        User?   @relation(fields: [userId], references: [id])
   userId      String?
+  Order       Order?
 }

@@ -2,68 +2,94 @@
 ### Do not make changes to this file directly
 
 
+type Address {
+  city: String!
+  id: String!
+  mainAddress: String!
+  orders: [Order]
+  phoneNumber: Int!
+  state: String!
+  user: User
+  userId: String!
+}
+
+type Cart {
+  id: ID
+  products: [Product]
+  user: User!
+  userId: String!
+}
+
+type Category {
+  id: ID
+  name: String!
+  products: [Product]
+  subcategories: [SubCategory]
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
 
-type Mutation {
-  createDraft(authorEmail: String!, data: PostCreateInput!): Post
-  deletePost(id: Int!): Post
-  incrementPostViewCount(id: Int!): Post
-  signupUser(data: UserCreateInput!): User!
-  togglePublishPost(id: Int!): Post
-}
-
-type Post {
-  author: User
-  content: String
+type Order {
+  address: Address!
+  addressId: String!
   createdAt: DateTime!
-  id: Int!
-  published: Boolean!
-  title: String!
+  id: ID
+  paymentMethod: String!
+  products: [Product]!
   updatedAt: DateTime!
-  viewCount: Int!
 }
 
-input PostCreateInput {
-  content: String
-  title: String!
-}
-
-input PostOrderByUpdatedAtInput {
-  updatedAt: SortOrder!
+type Product {
+  availability: Boolean
+  carts: [Cart]
+  category: Category
+  categoryId: String!
+  createdAt: DateTime!
+  description: String
+  id: ID
+  imageUrl: String!
+  name: String!
+  orders: [Order]
+  quantity: Int!
+  seller: Seller!
+  sellerId: String
+  stockQuantity: Int
+  subCategory: SubCategory!
+  subCategoryId: String!
+  unit: String!
+  updatedAt: DateTime!
+  viewCount: Int
+  weight: String!
 }
 
 type Query {
-  allUsers: [User!]!
-  draftsByUser(userUniqueInput: UserUniqueInput!): [Post]
-  feed(orderBy: PostOrderByUpdatedAtInput, searchString: String, skip: Int, take: Int): [Post!]!
-  hello: String
-  postById(id: Int): Post
+  ok: Boolean!
 }
 
-enum SortOrder {
-  asc
-  desc
+type Seller {
+  email: String!
+  id: ID
+  name: String!
+  phoneNumber: Int
+  products: [Product]
+}
+
+type SubCategory {
+  category: Category
+  id: ID
+  name: String!
+  products: [Product]
 }
 
 type User {
+  address: [Address]
+  cart: Cart
+  cartId: String!
   email: String!
-  gender: String
-  id: Int!
-  name: String
-  posts: [Post!]!
-}
-
-input UserCreateInput {
-  email: String!
-  gender: String
-  name: String
-  posts: [PostCreateInput!]
-}
-
-input UserUniqueInput {
-  email: String
-  id: Int
+  id: String!
+  name: String!
+  phoneNumber: Int
 }

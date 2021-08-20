@@ -7,27 +7,44 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+/// user model
 model User {
-  id          String   @id @default(cuid())
-  name        String?
-  email       String   @unique
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  phoneNumber Int?
+  address     Address[]
+  cart        Cart?     @relation(fields: [cartId], references: [id])
+  cartId      String
+
+}
+
+model Address {
+  id          String  @id @default(cuid())
+  city        String
   phoneNumber Int
-  Addres      Addres[]
-  Cart        Cart?
+  state       String
+  pincode     Int
+  nearBy      String
+  mainAddress String
+  // user ---- relation
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String?
+  orders      Order[]
 }
 
 model Cart {
   id       String    @id @default(cuid())
-  user     User?     @relation(fields: [userId], references: [id])
   products Product[]
-  userId   String?
+  user     User?
+
 }
 
 model Order {
   id            String    @id @default(cuid())
   products      Product[]
   paymentMethod String
-  order_address Addres?   @relation(fields: [addresId], references: [id])
+  orderAddress  Address?  @relation(fields: [addresId], references: [id])
   addresId      String?
 }
 
@@ -46,29 +63,34 @@ model Product {
   title           String?
   description     String
   imageUrl        String
-  unit            String?        @default("")
+  unit            String?        @default("gm")
   quantity        Int            @default(1)
   weight          String?
+  // category ---- relation
   categorie       Categorie?     @relation(fields: [categorieId], references: [id])
   categorieId     String?
+  // subCategory ---- relation
   subcategory     SubCategories? @relation(fields: [subCategoriesId], references: [id])
   subCategoriesId String?
   availability    Boolean?       @default(true)
-  stock_quantity  Int
+  stockQuantity   Int
   viewCount       Int            @default(0)
+  // seller ---- relation
   seller          Seller?        @relation(fields: [sellerId], references: [id])
-  sellerId        String?        @map("sellerId")
-  Cart            Cart?          @relation(fields: [cartId], references: [id])
-  cartId          String?
-  Order           Order?         @relation(fields: [orderId], references: [id])
-  orderId         String?
+  sellerId        String?
+
+  // ---------- product extra references ------
+  // cart ---- relation
+  carts  Cart[]
+  // order ---- relation
+  orders Order[]
 }
 
 model Categorie {
   id            String          @id @default(cuid())
   name          String
   subcategories SubCategories[]
-  Product       Product[]
+  product       Product[]
 }
 
 model SubCategories {
@@ -76,18 +98,5 @@ model SubCategories {
   name       String
   categorie  Categorie @relation(fields: [categoryid], references: [id])
   categoryid String
-  Product    Product[]
-}
-
-model Addres {
-  id          String  @id @default(cuid())
-  city        String
-  phoneNumber Int
-  state       String
-  pincode     Int
-  nearBy      String
-  mainAddress String
-  user        User?   @relation(fields: [userId], references: [id])
-  userId      String?
-  Order       Order?
+  product    Product[]
 }

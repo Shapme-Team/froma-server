@@ -4,24 +4,44 @@
 
 type Address {
   city: String!
-  id: String!
+  id: ID!
   mainAddress: String!
+  nearBy: String
   orders: [Order]
   phoneNumber: Int!
+  pincode: Int!
   state: String!
   user: User
-  userId: String!
+  userId: String
+}
+
+input AddressInputType {
+  city: String!
+  mainAddress: String!
+  nearBy: String
+  phoneNumber: Int!
+  pincode: Int!
+  state: String!
+  userId: String
 }
 
 type Cart {
-  id: ID
-  products: [Product]
-  user: User!
-  userId: String!
+  cartProducts: [CartProduct]
+  id: ID!
+  user: User
+  userId: String
+}
+
+type CartProduct {
+  id: ID!
+  order: Order
+  orderId: String
+  product: Product
+  productId: String
 }
 
 type Category {
-  id: ID
+  id: ID!
   name: String!
   products: [Product]
   subcategories: [SubCategory]
@@ -32,54 +52,85 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Mutation {
+  addAddressToUser(addressInputSchema: AddressInputType!, userId: String!): Address
+  createCategory(name: String!): Category
+  createProduct(productInput: ProductInputType!): Product
+  createSellerData(sellerInputType: SellerInputType!): Seller
+  createSubCategory(categoryId: String!, name: String!): SubCategory
+  createUserData(userUniqueInput: UserUniqueInput!): User
+}
+
 type Order {
-  address: Address!
-  addressId: String!
+  addresId: String
+  cartProducts: [CartProduct]
   createdAt: DateTime!
-  id: ID
+  id: ID!
+  orderAddress: Address
   paymentMethod: String!
-  products: [Product]!
-  updatedAt: DateTime!
+  user: User
+  userId: String
 }
 
 type Product {
   availability: Boolean
   carts: [Cart]
   category: Category
-  categoryId: String!
-  createdAt: DateTime!
-  description: String
-  id: ID
+  categoryId: String
+  description: String!
+  id: ID!
   imageUrl: String!
-  name: String!
   orders: [Order]
   quantity: Int!
-  seller: Seller!
+  seller: Seller
   sellerId: String
-  stockQuantity: Int
-  subCategory: SubCategory!
-  subCategoryId: String!
+  stockQuantity: Int!
+  subCategoryId: String
+  subcategory: SubCategory
+  title: String!
   unit: String!
-  updatedAt: DateTime!
-  viewCount: Int
+  viewCount: Int!
+  weight: String!
+}
+
+input ProductInputType {
+  availability: Boolean
+  categoryId: String
+  description: String!
+  imageUrl: String!
+  quantity: Int!
+  sellerId: String
+  stockQuantity: Int!
+  subCategoryId: String
+  title: String!
+  unit: String!
+  viewCount: Int!
   weight: String!
 }
 
 type Query {
-  ok: Boolean!
+  getAllProducts: [Product]
+  getAllUsers: [User]
 }
 
 type Seller {
   email: String!
-  id: ID
-  name: String!
-  phoneNumber: Int
+  id: ID!
+  name: String
+  phoneNumber: Int!
   products: [Product]
+}
+
+input SellerInputType {
+  email: String!
+  name: String!
+  phoneNumber: Int!
 }
 
 type SubCategory {
   category: Category
-  id: ID
+  categoryid: String
+  id: ID!
   name: String!
   products: [Product]
 }
@@ -87,9 +138,15 @@ type SubCategory {
 type User {
   address: [Address]
   cart: Cart
-  cartId: String!
   email: String!
-  id: String!
+  id: ID!
+  name: String!
+  orders: [Order]
+  phoneNumber: Int
+}
+
+input UserUniqueInput {
+  email: String!
   name: String!
   phoneNumber: Int
 }

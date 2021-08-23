@@ -11,20 +11,13 @@ import {
   queryType,
   interfaceType,
 } from 'nexus'
-import * as SchemaTypes from './schema/schemaTypes'
+import  * as AllSchemas from './schema/schemaTypes';
 import { DateTimeResolver } from 'graphql-scalars'
 import { Context } from './context'
 
 export const schema = makeSchema({
-  types: [
-    SchemaTypes
-    // UserUniqueInput,
-    // UserCreateInput,
-    // PostCreateInput,
-    // SortOrder,
-    // PostOrderByUpdatedAtInput,
-    // DateTime,
-  ],
+  types: [AllSchemas],
+
   outputs: {
     schema: __dirname + '/../schema.graphql',
     typegen: __dirname + '/generated/nexus.ts',

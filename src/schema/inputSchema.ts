@@ -1,6 +1,6 @@
 import { inputObjectType } from 'nexus'
 import { User, Address, Product } from 'nexus-prisma'
-import SchemaTypes from './schemaTypes'
+// import SchemaTypes from './schemaTypes'
 
 export const UserUniqueInput = inputObjectType({
   name: 'UserUniqueInput',
@@ -26,7 +26,7 @@ export const SellerUniqueInput = inputObjectType({
     t.field(User.phoneNumber)
   },
 })
-export const AddressInput = inputObjectType({
+export const AddressInputType = inputObjectType({
   name: 'AddressInputType',
   definition(t) {
     t.field(Address.city)
@@ -62,19 +62,19 @@ export const ProductInputType = inputObjectType({
 })
 
 
-export const c = inputObjectType({
-  name: 'AddressInputType',
-  definition(t) {
-    t.field(Address.city)
-    t.field(Address.phoneNumber)
-    t.field(Address.state)
-    t.field(Address.pincode)
-    t.field(Address.nearBy)
-    t.field(Address.mainAddress)
+// export const c = inputObjectType({
+//   name: 'AddressInputType',
+//   definition(t) {
+//     t.field(Address.city)
+//     t.field(Address.phoneNumber)
+//     t.field(Address.state)
+//     t.field(Address.pincode)
+//     t.field(Address.nearBy)
+//     t.field(Address.mainAddress)
     
-    t.field(Address.userId)
-  },
-})
+//     t.field(Address.userId)
+//   },
+// })
 
 
 // export const OrderInputType = inputObjectType({

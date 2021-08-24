@@ -1,13 +1,7 @@
-import {
-  objectType,
-  stringArg,
-  asNexusMethod,
-  extendType,
-  nonNull,
-  arg,
-} from 'nexus'
+import { objectType, asNexusMethod } from 'nexus'
 import { DateTimeResolver } from 'graphql-scalars'
 import { Context } from '../context'
+
 import {
   User,
   Address,
@@ -19,17 +13,8 @@ import {
   Order,
   CartProduct,
 } from 'nexus-prisma'
-import {
-  AddressInput,
-  ProductInputType,
-  SellerInputType,
-  UserUniqueInput,
-} from './inputSchema'
-import { prisma } from '@prisma/client'
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'date')
-
-// getAllProducts()
 
 //* -------------------------------------------------   user
 const UserTypes = objectType({
@@ -322,137 +307,10 @@ const SubCategoryType = objectType({
 
 // todo ----------- QUERIES AND MUTATIONS  --------------------
 // todo ----------- QUERIES AND MUTATIONS  --------------------
-const createMutation = extendType({
-  type: 'Mutation',
-  definition(t) {
-    t.field('createUserData', {
-      type: User.$name,
-      args: {
-        userUniqueInput: nonNull(
-          arg({
-            type: UserUniqueInput,
-          }),
-        ),
-      },
-      async resolve(parent, args, ctx) {
-        var userModel = await ctx.prisma.user.create({
-          data: {
-            phoneNumber: args.userUniqueInput.phoneNumber,
-            email: args.userUniqueInput.email,
-            name: args.userUniqueInput.name,
-          },
-        })
-        //* a cart model will be created when user model is created
-        await ctx.prisma.cart.create({
-          data: {
-            userId: userModel.id,
-          },
-        })
-        return userModel
-      },
-    })
-    t.field('createSellerData', {
-      type: Seller.$name,
-      args: {
-        sellerInputType: nonNull(
-          arg({
-            type: SellerInputType,
-          }),
-        ),
-      },
-      resolve(parent, args, ctx) {
-        return ctx.prisma.seller.create({
-          data: {
-            phoneNumber: args.sellerInputType.phoneNumber,
-            email: args.sellerInputType.email,
-            name: args.sellerInputType.name,
-          },
-        })
-      },
-    })
 
-    t.field('addAddressToUser', {
-      type: Address.$name,
-      args: {
-        userId: nonNull(stringArg()),
-        addressInputSchema: nonNull(
-          arg({
-            type: AddressInput,
-          }),
-        ),
-      },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.address.create({
-          data: { ...args.addressInputSchema, userId: args.userId },
-        })
-      },
-    })
-
-    t.field('createCategory', {
-      type: Category.$name,
-      args: {
-        name: nonNull(stringArg()),
-      },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.category.create({
-          data: {
-            name: args.name,
-          },
-        })
-      },
-    })
-    t.field('createSubCategory', {
-      type: SubCategory.$name,
-      args: {
-        name: nonNull(stringArg()),
-        categoryId: nonNull(stringArg()),
-      },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.subCategory.create({
-          data: {
-            name: args.name,
-            categoryid: args.categoryId,
-          },
-        })
-      },
-    })
-    t.field('createProduct', {
-      type: Product.$name,
-      args: {
-        productInput: nonNull(
-          arg({
-            type: ProductInputType,
-          }),
-        ),
-      },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.product.create({
-          data: args.productInput,
-        })
-      },
-    })
-  },
-})
 // todo ----------------------- QUERY ---------------
-export const getUsersQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('getAllUsers', {
-      type: User.$name,
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.user.findMany()
-      },
-    })
-    t.list.field('getAllProducts', {
-      type: Product.$name,
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.product.findMany()
-      },
-    })
-  },
-})
 
-export default {
+export {
   UserTypes,
   AddressType,
   SubCategoryType,
@@ -462,6 +320,6 @@ export default {
   CartType,
   SellerType,
   CartProductType,
-  createMutation,
+  // createMutation,
 }
 //* -------------------------------------------------   POST

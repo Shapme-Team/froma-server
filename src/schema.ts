@@ -1,22 +1,12 @@
-import {
-  intArg,
-  makeSchema,
-  nonNull,
-  objectType,
-  stringArg,
-  inputObjectType,
-  arg,
-  asNexusMethod,
-  enumType,
-  queryType,
-  interfaceType,
-} from 'nexus'
-import  * as AllSchemas from './schema/schemaTypes';
-import { DateTimeResolver } from 'graphql-scalars'
-import { Context } from './context'
+import { makeSchema } from 'nexus'
+// import  * as AllSchemas from './schema/schemaTypes';
+import * as allqueries from './index'
+// import { DateTimeResolver } from 'graphql-scalars'
+// import { Context } from './context'
+
 
 export const schema = makeSchema({
-  types: [AllSchemas],
+  types: [allqueries],
 
   outputs: {
     schema: __dirname + '/../schema.graphql',

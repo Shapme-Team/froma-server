@@ -109,7 +109,9 @@ input ProductInputType {
 }
 
 type Query {
+  getAllCategory: [Category]
   getAllProducts: [Product]
+  getAllSellers: [Seller]
   getAllUsers: [User]
 }
 
@@ -125,6 +127,12 @@ input SellerInputType {
   email: String!
   name: String!
   phoneNumber: Int!
+}
+
+input SellerUniqueInput {
+  email: String!
+  name: String!
+  phoneNumber: Int
 }
 
 type SubCategory {

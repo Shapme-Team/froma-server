@@ -55,6 +55,7 @@ export const createMutation = extendType({
       resolve(parent, args, ctx) {
         return ctx.prisma.seller.create({
           data: {
+            id: args.sellerInputType.id,
             phoneNumber: args.sellerInputType.phoneNumber,
             email: args.sellerInputType.email,
             name: args.sellerInputType.name,

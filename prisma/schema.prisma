@@ -59,7 +59,7 @@ model Order {
 }
 
 model Seller {
-  id          String    @id @default(cuid())
+  id          String    @id
   email       String    @unique
   name        String?
   phoneNumber Int

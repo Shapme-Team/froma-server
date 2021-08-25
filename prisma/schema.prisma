@@ -73,6 +73,7 @@ model Product {
   title         String
   description   String
   imageUrl      String
+  price         Int          @default(10)
   unit          String       @default("gm")
   quantity      Int          @default(1)
   weight        String

@@ -47,6 +47,7 @@ export const ProductInputType = inputObjectType({
     t.field(Product.title)
     t.field(Product.description)
     t.field(Product.imageUrl)
+    t.field(Product.price)
     t.field(Product.unit)
     t.field(Product.quantity)
     t.field(Product.weight)

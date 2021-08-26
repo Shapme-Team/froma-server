@@ -37,25 +37,25 @@ model Address {
 }
 
 model Cart {
-  id       String    @id @default(cuid())
-  products Product[]
-  cart     User?     @relation(fields: [userId], references: [id])
+  id       String        @id @default(cuid())
+  products CartProduct[]
+  user     User?         @relation(fields: [userId], references: [id])
   userId   String?
-
 }
 
 model Order {
   id String @id @default(cuid())
+  paymentMethod String
+  createdAt     DateTime @default(now())
 
   cartProducts CartProduct[]
 
-  orderAddress Address? @relation(fields: [addresId], references: [id])
-  user         User?    @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
-  paymentMethod String
-  addresId      String?
-  userId        String?
-  createdAt     DateTime @default(now())
+  orderAddress Address? @relation(fields: [addresId], references: [id])
+  addresId     String?
+
 }
 
 model Seller {
@@ -70,12 +70,15 @@ model Product {
   id            String       @id @default(cuid())
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+
   title         String
   description   String
   imageUrl      String
+
   unit          String       @default("gm")
-  quantity      Int          @default(1)
-  weight        String
+  // quantity      Int          @default(1)
+  weight        Int?
+  price         Int?        @default(10)
   // category ---- relation
   category      Category?    @relation(fields: [categoryId], references: [id])
   categoryId    String?
@@ -91,7 +94,6 @@ model Product {
 
   // ---------- product extra references ------
   // cart ---- relation
-  carts       Cart[]
   // order ---- relation
   CartProduct CartProduct[]
 }
@@ -104,6 +106,10 @@ model CartProduct {
 
   order   Order?  @relation(fields: [orderId], references: [id])
   orderId String?
+
+  cart     Cart?   @relation(fields: [cartId], references: [id])
+  cartId   String?
+  quantity Int?    @default(1)
 }
 
 model Category {

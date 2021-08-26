@@ -98,7 +98,7 @@ const CartType = objectType({
       },
     })
 
-    t.list.field('cartProducts', {
+    t.list.field('products', {
       type: CartProduct.$name,
       resolve: (parent, _, ctx) => {
         return ctx.prisma.cartProduct.findMany()
@@ -127,7 +127,7 @@ const OrderType = objectType({
         })
       },
     })
-    t.list.field('cartProducts', {
+    t.list.field('products', {
       type: CartProduct.$name,
       resolve: (parent, _, ctx) => {
         return ctx.prisma.cartProduct.findMany()
@@ -153,6 +153,19 @@ const CartProductType = objectType({
     t.field(CartProduct.id)
     t.field(CartProduct.orderId)
     t.field(CartProduct.productId)
+    t.field(CartProduct.cartId)
+    t.field(CartProduct.quantity)
+
+    t.field('cart',{
+      type: Cart.$name,
+      resolve: (parent, _, ctx) => {
+        return ctx.prisma.cart.findFirst({
+          where: {
+            id: parent.cartId ?? undefined,
+          }
+        })
+      }
+    })
 
     t.field('order', {
       type: Order.$name,
@@ -202,8 +215,9 @@ const ProductType = objectType({
     t.field(Product.description)
     t.field(Product.imageUrl)
     t.field(Product.unit)
-    t.field(Product.quantity)
+    // t.field(Product.quantity)
     t.field(Product.weight)
+    t.field(Product.price)
 
     t.field(Product.categoryId)
     t.field(Product.subCategoryId)
@@ -227,7 +241,11 @@ const ProductType = objectType({
     t.field('category', {
       type: Category.$name,
       resolve(parent, arg, ctx) {
-        return ctx.prisma.category.findFirst()
+        return ctx.prisma.category.findFirst({
+          where: {
+            id: parent.categoryId ?? undefined
+          }
+        })
       },
     })
 
@@ -304,6 +322,8 @@ const SubCategoryType = objectType({
     })
   },
 })
+
+
 
 // todo ----------- QUERIES AND MUTATIONS  --------------------
 // todo ----------- QUERIES AND MUTATIONS  --------------------

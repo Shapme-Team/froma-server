@@ -26,18 +26,21 @@ input AddressInputType {
 }
 
 type Cart {
-  cartProducts: [CartProduct]
   id: ID!
+  products: [CartProduct]
   user: User
   userId: String
 }
 
 type CartProduct {
+  cart: Cart
+  cartId: String
   id: ID!
   order: Order
   orderId: String
   product: Product
   productId: String
+  quantity: Int
 }
 
 type Category {
@@ -54,21 +57,42 @@ scalar DateTime
 
 type Mutation {
   addAddressToUser(addressInputSchema: AddressInputType!, userId: String!): Address
+  addProductItemToCart(cartId: String!, productId: String!, quantity: Int! = 1): CartProduct
   createCategory(name: String!): Category
+  createOrderForUser(orderUniqueInput: OrderInputType!): Order
   createProduct(productInput: ProductInputType!): Product
   createSellerData(sellerInputType: SellerInputType!): Seller
   createSubCategory(categoryId: String!, name: String!): SubCategory
   createUserData(userUniqueInput: UserUniqueInput!): User
+  deleteCartProduct(cartProudctId: String!): Cart
+  deleteCategory(categoryId: String!): Category
+  deleteProductById(productId: String!): Product
+  deleteSubCategory(subCategoryId: String!): SubCategory
+  deleteUser(userId: String!): User
+  deleteUserAddress(addressId: String!): Address
+  updateCartProductQuantity(id: ID!, quantity: Int!): CartProduct
+  updateCategoryName(categoryId: String!, categoryName: String!): Category
+  updateProductDetails(productArg: UpdateProductInput!, productId: String!): Product
+  updateSubCategoryName(subCategoryId: String!, subCategoryName: String!): SubCategory
+  updateUserAddress(addressArg: UpdateAddressInput!): Address
+  updateUserInfo(userUpdateInputType: UserUpdateInputType!): User
 }
 
 type Order {
   addresId: String
-  cartProducts: [CartProduct]
   createdAt: DateTime!
   id: ID!
   orderAddress: Address
   paymentMethod: String!
+  products: [CartProduct]
   user: User
+  userId: String
+}
+
+input OrderInputType {
+  addresId: String
+  paymentMethod: String!
+  productIds: [String!]!
   userId: String
 }
 
@@ -81,7 +105,7 @@ type Product {
   id: ID!
   imageUrl: String!
   orders: [Order]
-  quantity: Int!
+  price: Int
   seller: Seller
   sellerId: String
   stockQuantity: Int!
@@ -90,7 +114,7 @@ type Product {
   title: String!
   unit: String!
   viewCount: Int!
-  weight: String!
+  weight: Int
 }
 
 input ProductInputType {
@@ -98,14 +122,14 @@ input ProductInputType {
   categoryId: String
   description: String!
   imageUrl: String!
-  quantity: Int!
+  price: Int
   sellerId: String
   stockQuantity: Int!
   subCategoryId: String
   title: String!
   unit: String!
   viewCount: Int!
-  weight: String!
+  weight: Int
 }
 
 type Query {
@@ -113,6 +137,17 @@ type Query {
   getAllProducts: [Product]
   getAllSellers: [Seller]
   getAllUsers: [User]
+  getCartByUserId(userId: String!): Cart
+  getOrderByOrderId(orderId: String!): Order
+  getOrdersByUserId(userId: String!): [Order]
+  getProductByProductId(productId: String!): Product
+  getProductOfSellerBySellerId(sellerId: String!): [Product]
+  getProductsOfCart(cartId: String!): Cart
+  getProdutsByCategoryIds(categoryId: String!): [Product]
+  getProdutsBySubCategoryId(subCategoryId: String!): [Product]
+  getSellerBySellerId(sellerId: String!): Seller
+  getSubCategoriesByCategoryId(categoryId: String!): [SubCategory]
+  getUserByUserId(userId: String!): User
 }
 
 type Seller {
@@ -129,18 +164,35 @@ input SellerInputType {
   phoneNumber: Int!
 }
 
-input SellerUniqueInput {
-  email: String!
-  name: String!
-  phoneNumber: Int
-}
-
 type SubCategory {
   category: Category
   categoryid: String
   id: ID!
   name: String!
   products: [Product]
+}
+
+input UpdateAddressInput {
+  city: String
+  id: ID!
+  mainAddress: String
+  nearBy: String
+  phoneNumber: Int
+  pincode: Int
+  state: String
+}
+
+input UpdateProductInput {
+  availability: Boolean
+  categoryId: String
+  description: String
+  imageUrl: String
+  price: Int
+  stockQuantity: Int
+  subCategoryId: String
+  title: String
+  unit: String
+  weight: Int
 }
 
 type User {
@@ -156,5 +208,11 @@ type User {
 input UserUniqueInput {
   email: String!
   name: String!
+  phoneNumber: Int
+}
+
+input UserUpdateInputType {
+  id: ID!
+  name: String
   phoneNumber: Int
 }

@@ -1,9 +1,9 @@
 import { makeSchema } from 'nexus'
 // import  * as AllSchemas from './schema/schemaTypes';
-import * as allqueries from './index'
+import * as allqueries from './schema/index'
+
 // import { DateTimeResolver } from 'graphql-scalars'
 // import { Context } from './context'
-
 
 export const schema = makeSchema({
   types: [allqueries],

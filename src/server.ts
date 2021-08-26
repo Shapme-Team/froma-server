@@ -4,12 +4,11 @@ import { context } from './context'
 
 const server = new ApolloServer({
   schema: schema,
-  context: context,
+  context: context, 
 })
 
 server.listen().then(async ({ url }) => {
   console.log(`\
-🚀 Server ready at: ${url}
-⭐️ See sample queries: http://pris.ly/e/ts/graphql#using-the-graphql-api
+🚀 GRAPHQL Server ready at: ${url}
   `)
 })

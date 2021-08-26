@@ -1,7 +1,10 @@
-import { arg, extendType, nonNull, stringArg } from 'nexus'
+import { arg, extendType, idArg, intArg, list, nonNull, stringArg } from 'nexus'
 import {
   Address,
+  Cart,
+  CartProduct,
   Category,
+  Order,
   Product,
   Seller,
   SubCategory,
@@ -9,6 +12,7 @@ import {
 } from 'nexus-prisma'
 import {
   AddressInputType,
+  OrderInputType,
   ProductInputType,
   SellerInputType,
   UserUniqueInput,
@@ -120,6 +124,71 @@ export const createMutation = extendType({
       resolve: (parent, args, ctx) => {
         return ctx.prisma.product.create({
           data: args.productInput,
+        })
+      },
+    })
+
+    t.field('addProductItemToCart', {
+      type: CartProduct.$name,
+      args: {
+        cartId: nonNull(stringArg()),
+        productId: nonNull(stringArg()),
+        quantity: nonNull(
+          intArg({
+            default: 1,
+          }),
+        ),
+      },
+      resolve: (parent, args, ctx) => {
+        return ctx.prisma.cartProduct.create({
+          data: {
+            cartId: args.cartId ?? undefined,
+            productId: args.productId,
+            quantity: args.quantity ?? 1,
+          },
+        })
+      },
+    })
+    
+    //* ---------------- create ORDER -------------- 
+
+    t.field('createOrderForUser', {
+      type: Order.$name,
+      args: {
+        orderUniqueInput: nonNull(
+          arg({
+            type: OrderInputType,
+          }),
+        ),
+      },
+      resolve: async (parent, args, ctx) => {
+        var connectMap: { id: string }[] = []
+        // creating a connect map to connect with all the cartProduct ids received from arg.
+        args.orderUniqueInput.productIds.forEach((e) => {
+          connectMap.push({ id: e })
+        })
+
+        // removing cartproducts from cart after order is placed 
+        // by setting cartId to -> null
+        await ctx.prisma.cartProduct.updateMany({
+          where: {
+            id: {
+              in: args.orderUniqueInput.productIds
+            }
+          },
+          data: {
+            cartId: null
+          }
+        })
+        return ctx.prisma.order.create({
+          data: {
+            addresId: args.orderUniqueInput?.addresId,
+            paymentMethod: args.orderUniqueInput?.paymentMethod,
+            userId: args.orderUniqueInput?.userId,
+            cartProducts: {
+              connect: connectMap,
+            },
+          },
         })
       },
     })

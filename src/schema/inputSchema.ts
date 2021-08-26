@@ -13,8 +13,9 @@ export const UserUniqueInput = inputObjectType({
 export const SellerInputType = inputObjectType({
   name: 'SellerInputType',
   definition(t) {
-    t.field(User.name)
-    t.field(User.email)
+    t.nonNull.field(User.id)
+    t.nonNull.field(User.name)
+    t.nonNull.field(User.email)
     t.nonNull.field(User.phoneNumber)
   },
 })
@@ -38,6 +39,7 @@ export const ProductInputType = inputObjectType({
     t.field(Product.title)
     t.field(Product.description)
     t.field(Product.imageUrl)
+    t.field(Product.price)
     t.field(Product.unit)
     // t.field(Product.quantity)
     t.field(Product.weight)

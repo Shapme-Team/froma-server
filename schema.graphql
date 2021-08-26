@@ -160,6 +160,7 @@ type Seller {
 
 input SellerInputType {
   email: String!
+  id: ID!
   name: String!
   phoneNumber: Int!
 }

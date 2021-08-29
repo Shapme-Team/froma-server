@@ -285,13 +285,21 @@ const CategoryType = objectType({
     t.list.field('subcategories', {
       type: SubCategory.$name,
       resolve(parent, arg, ctx) {
-        return ctx.prisma.subCategory.findMany()
+        return ctx.prisma.subCategory.findMany({
+          where:{
+            categoryid: parent.id
+          }
+        })
       },
     })
     t.list.field('products', {
       type: Product.$name,
       resolve: async (parent, _, ctx: Context) => {
-        return ctx.prisma.product.findMany()
+        return ctx.prisma.product.findMany({
+          where:{
+            categoryId: parent.id
+          }
+        })
       },
     })
   },
@@ -317,7 +325,11 @@ const SubCategoryType = objectType({
     t.list.field('products', {
       type: Product.$name,
       resolve(parent, arg, ctx: Context) {
-        return ctx.prisma.product.findMany()
+        return ctx.prisma.product.findMany({
+          where:{
+            subCategoryId: parent.id
+          }
+        })
       },
     })
   },

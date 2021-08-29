@@ -178,7 +178,7 @@ export const updateMutation = extendType({
           },
           data:{
             name: args.subCategoryName
-          } 
+          }
         })
       },
     })

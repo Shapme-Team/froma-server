@@ -4,4 +4,4 @@ export *  from './updateMutationSchema';
 
 export * from './inputSchema'
 export * from './querySchema'
-export * from './schemaTypes'
+export * from '../schemaTypes'

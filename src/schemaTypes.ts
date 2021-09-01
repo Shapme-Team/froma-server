@@ -1,6 +1,6 @@
 import { objectType, asNexusMethod } from 'nexus'
 import { DateTimeResolver } from 'graphql-scalars'
-import { Context } from '../context'
+import { Context } from './context'
 
 import {
   User,

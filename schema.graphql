@@ -134,17 +134,17 @@ input ProductInputType {
 
 type Query {
   getAllCategory: [Category]
-  getAllProducts: [Product]
+  getAllProducts(cursorId: String, limit: Int): [Product]
   getAllSellers: [Seller]
   getAllUsers: [User]
   getCartByUserId(userId: String!): Cart
   getOrderByOrderId(orderId: String!): Order
   getOrdersByUserId(userId: String!): [Order]
   getProductByProductId(productId: String!): Product
-  getProductOfSellerBySellerId(sellerId: String!): [Product]
+  getProductOfSellerBySellerId(limit: Int, sellerId: String!, skip: Int): [Product]
   getProductsOfCart(cartId: String!): Cart
-  getProdutsByCategoryIds(categoryId: String!): [Product]
-  getProdutsBySubCategoryId(subCategoryId: String!): [Product]
+  getProdutsByCategoryIds(categoryId: String!, cursorId: String, limit: Int): [Product]
+  getProdutsBySubCategoryId(cursorId: String, limit: Int, subCategoryId: String!): [Product]
   getSellerBySellerId(sellerId: String!): Seller
   getSubCategoriesByCategoryId(categoryId: String!): [SubCategory]
   getUserByUserId(userId: String!): User

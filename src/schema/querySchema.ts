@@ -1,4 +1,4 @@
-import { extendType, nonNull, queryField, stringArg } from 'nexus'
+import { extendType, intArg, nonNull, queryField, stringArg } from 'nexus'
 import { context } from '../context'
 import { Cart, Category, Order, Product, Seller, SubCategory, User } from 'nexus-prisma'
 import { extendSchema } from 'graphql'
@@ -109,43 +109,84 @@ export const getUsersQuery = extendType({
         })
       },
     })
+    //todo ----------- using [OFFSET-PAGINATION] ------------ 
     t.list.field('getProductOfSellerBySellerId', {
       type: Product.$name,
       args: {
-        sellerId: nonNull(stringArg())
+        sellerId: nonNull(stringArg()),
+        limit: intArg(),        
+        skip: intArg(), 
       },
       resolve: (parent, args, ctx) => {
         return ctx.prisma.product.findMany({
           where: {
             sellerId: args.sellerId
-          }
+          },
+          take: args.limit ?? undefined,
+          skip: args.skip ?? undefined,
         })
       },
     })
     
+    //todo ----------- using [CURSOR-PAGINATION] ------------ 
+
     t.list.field('getProdutsByCategoryIds', {
       type: Product.$name,
       args: {
-        categoryId: nonNull(stringArg())
+        categoryId: nonNull(stringArg()),
+        limit: intArg(),        
+        cursorId: stringArg()
       },
       resolve: (parent, args, ctx) => {
+        let cursorArgs = {
+          ...(args.limit && {take: args.limit} ),
+          ...(args.cursorId && {cursor: {
+            id: args.cursorId
+          }})
+        }
+
         return ctx.prisma.product.findMany({
           where: {
             categoryId: args.categoryId
-          }
+          },
+          ...cursorArgs
         })
       },
     })
+    // t.list.field('getPopularOrders', {
+    //   type: Product.$name,
+    //   args: {
+    //     productLimit: nonNull(intArg())
+    //   },
+    //   resolve: (parent, args, ctx) => {
+    //     return ctx.prisma.product.findMany({
+    //       where: {
+    //         categoryId: args.categoryId
+    //       },
+    //       take: args.productLimit
+    //     })
+    //   },
+    // })
     t.list.field('getProdutsBySubCategoryId', {
       type: Product.$name,
       args: {
-        subCategoryId: nonNull(stringArg())
+        subCategoryId: nonNull(stringArg()),
+        limit: intArg(),
+        cursorId: stringArg()
+
       },
       resolve: (parent, args, ctx) => {
+        let cursorArgs = {
+          ...(args.limit && {take: args.limit} ),
+          ...(args.cursorId && {cursor: {
+            id: args.cursorId
+          }})
+        }
         return ctx.prisma.product.findMany({
           where: {
             subCategoryId: args.subCategoryId
-          }
+          },
+          ...cursorArgs
         })
       },
     })
@@ -179,8 +220,21 @@ export const getUsersQuery = extendType({
     })
     t.list.field('getAllProducts', {
       type: Product.$name,
+      args: {
+        limit: intArg(),        
+        cursorId: stringArg()
+      },
+      
       resolve: (parent, args, ctx) => {
-        return ctx.prisma.product.findMany()
+        let findManyArgs = {
+          ...(args.limit && {take: args.limit} ),
+          ...(args.cursorId && {cursor: {
+            id: args.cursorId
+          }})
+        }
+        return ctx.prisma.product.findMany({
+          ...findManyArgs,
+        })
       },
     })
     t.list.field('getAllCategory', {

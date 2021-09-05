@@ -103,9 +103,10 @@ export const updateMutation = extendType({
           }),
         ),
       },
+
       resolve: (_, args, ctx) => {
         var productUPdateData = {
-          ...(args.productArg.availability && {
+          ...(args.productArg.availability != null && {
             availability: args.productArg.availability,
           }),
           ...(args.productArg.categoryId && {

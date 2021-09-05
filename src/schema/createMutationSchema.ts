@@ -140,18 +140,41 @@ export const createMutation = extendType({
           }),
         ),
       },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.cartProduct.create({
-          data: {
-            cartId: args.cartId ?? undefined,
-            productId: args.productId,
-            quantity: args.quantity ?? 1,
+      resolve: async (parent, args, ctx) => {
+        let cartItems = await ctx.prisma.cart.findFirst({
+          where: {
+            id: args.cartId,
+          },
+          include: {
+            products: true,
           },
         })
+        var cartProducts = cartItems?.products
+        var existingProduct = cartProducts?.find(
+          (e) => e.productId === args.productId,
+        )
+        if (existingProduct != undefined) {
+          return ctx.prisma.cartProduct.update({
+            where: {
+              id: existingProduct.id,
+            },
+            data: {
+              quantity: (existingProduct.quantity ?? 1) + args.quantity,
+            },
+          })
+        } else {
+          return ctx.prisma.cartProduct.create({
+            data: {
+              cartId: args.cartId ?? undefined,
+              productId: args.productId,
+              quantity: args.quantity ?? 1,
+            },
+          })
+        }
       },
     })
-    
-    //* ---------------- create ORDER -------------- 
+
+    //* ---------------- create ORDER --------------
 
     t.field('createOrderForUser', {
       type: Order.$name,
@@ -169,17 +192,17 @@ export const createMutation = extendType({
           connectMap.push({ id: e })
         })
 
-        // removing cartproducts from cart after order is placed 
+        // removing cartproducts from cart after order is placed
         // by setting cartId to -> null
         await ctx.prisma.cartProduct.updateMany({
           where: {
             id: {
-              in: args.orderUniqueInput.productIds
-            }
+              in: args.orderUniqueInput.productIds,
+            },
           },
           data: {
-            cartId: null
-          }
+            cartId: null,
+          },
         })
         return ctx.prisma.order.create({
           data: {

@@ -57,8 +57,10 @@ const AddressType = objectType({
     t.field(Address.phoneNumber)
     t.field(Address.state)
     t.field(Address.pincode)
-    t.field(Address.nearBy)
-    t.field(Address.mainAddress)
+    t.field(Address.landmark)
+    t.field(Address.area)
+    t.field(Address.fullName)
+    t.field(Address.houseNumber)
     t.field(Address.userId)
 
     t.field('user', {

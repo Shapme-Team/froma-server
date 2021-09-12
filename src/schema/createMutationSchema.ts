@@ -33,6 +33,7 @@ export const createMutation = extendType({
       async resolve(parent, args, ctx) {
         var userModel = await ctx.prisma.user.create({
           data: {
+            id: args.userUniqueInput.id,
             phoneNumber: args.userUniqueInput.phoneNumber,
             email: args.userUniqueInput.email,
             name: args.userUniqueInput.name,

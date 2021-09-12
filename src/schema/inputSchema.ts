@@ -5,6 +5,7 @@ import { User, Address, Product, Order } from 'nexus-prisma'
 export const UserUniqueInput = inputObjectType({
   name: 'UserUniqueInput',
   definition(t) {
+    t.field(User.id)
     t.field(User.name)
     t.field(User.email)
     t.field(User.phoneNumber)
@@ -27,8 +28,10 @@ export const AddressInputType = inputObjectType({
     t.field(Address.phoneNumber)
     t.field(Address.state)
     t.field(Address.pincode)
-    t.field(Address.nearBy)
-    t.field(Address.mainAddress)
+    t.field(Address.fullName)
+    t.field(Address.landmark)
+    t.field(Address.houseNumber)
+    t.field(Address.area)
     t.field(Address.userId)
   },
 })
@@ -82,9 +85,10 @@ export const UpdateAddressInput = inputObjectType({
     t.nonNull.field(Address.id)
     t.string(Address.city.name)
     t.string(Address.state.name)
-    t.string(Address.nearBy.name)
-    t.string(Address.mainAddress.name)
-
+    t.string(Address.landmark.name)
+    t.string(Address.fullName.name)
+    t.string(Address.area.name)
+    t.string(Address.houseNumber.name)
     t.int(Address.pincode.name)
     t.int(Address.phoneNumber.name)
 

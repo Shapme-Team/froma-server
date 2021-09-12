@@ -74,10 +74,12 @@ export const updateMutation = extendType({
       resolve: (_, args, ctx) => {
         var addressUpdateData = {
           ...(args.addressArg.city && { city: args.addressArg.city }),
-          ...(args.addressArg.mainAddress && {
-            mainAddress: args.addressArg.mainAddress,
+          ...(args.addressArg.landmark && {
+            landmark: args.addressArg.landmark,
           }),
-          ...(args.addressArg.nearBy && { nearBy: args.addressArg.nearBy }),
+          ...(args.addressArg.area && { area: args.addressArg.area }),
+          ...(args.addressArg.houseNumber && { houseNumber: args.addressArg.houseNumber }),
+          ...(args.addressArg.fullName && { fullName: args.addressArg.fullName }),
           ...(args.addressArg.state && { state: args.addressArg.state }),
           ...(args.addressArg.phoneNumber && {
             phoneNumber: args.addressArg.phoneNumber,

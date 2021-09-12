@@ -1,8 +1,16 @@
 import { extendType, nonNull, stringArg } from 'nexus'
-import { Address, Cart, Category, Product, SubCategory, User } from 'nexus-prisma'
+import {
+  Address,
+  Cart,
+  Category,
+  Product,
+  SubCategory,
+  User,
+} from 'nexus-prisma'
 
 export const deleteMutation = extendType({
   type: 'Mutation',
+  
   definition(t) {
     t.field('deleteUserAddress', {
       type: Address.$name,
@@ -16,20 +24,21 @@ export const deleteMutation = extendType({
           },
         })
       },
-    })
-    t.field('deleteUser', {
-      type: User.$name,
-      args: {
-        userId: nonNull(stringArg()),
-      },
-      resolve: (parent, args, ctx) => {
-        return ctx.prisma.user.delete({
-          where: {
-            id: args.userId,
-          },
-        })
-      },
-    })
+    }),
+
+      t.field('deleteUser', {
+        type: User.$name,
+        args: {
+          userId: nonNull(stringArg()),
+        },
+        resolve: (parent, args, ctx) => {
+          return ctx.prisma.user.delete({
+            where: {
+              id: args.userId,
+            },
+          })
+        },
+      })
     t.field('deleteCartProduct', {
       type: Cart.$name,
       args: {
@@ -75,7 +84,6 @@ export const deleteMutation = extendType({
         categoryId: nonNull(stringArg()),
       },
       resolve: async (parent, args, ctx) => {
-
         var categoryData = await ctx.prisma.category.findFirst({
           where: {
             id: args.categoryId,

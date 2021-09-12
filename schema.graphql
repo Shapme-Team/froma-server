@@ -3,10 +3,12 @@
 
 
 type Address {
+  area: String!
   city: String!
+  fullName: String!
+  houseNumber: String!
   id: ID!
-  mainAddress: String!
-  nearBy: String
+  landmark: String
   orders: [Order]
   phoneNumber: Int!
   pincode: Int!
@@ -16,9 +18,11 @@ type Address {
 }
 
 input AddressInputType {
+  area: String!
   city: String!
-  mainAddress: String!
-  nearBy: String
+  fullName: String!
+  houseNumber: String!
+  landmark: String
   phoneNumber: Int!
   pincode: Int!
   state: String!
@@ -133,6 +137,8 @@ input ProductInputType {
 }
 
 type Query {
+  getAddressByAddressId(addressId: String!): Address
+  getAddressByUserId(userId: String!): [Address]
   getAllCategory: [Category]
   getAllProducts(cursorId: String, limit: Int): [Product]
   getAllSellers: [Seller]
@@ -174,10 +180,12 @@ type SubCategory {
 }
 
 input UpdateAddressInput {
+  area: String
   city: String
+  fullName: String
+  houseNumber: String
   id: ID!
-  mainAddress: String
-  nearBy: String
+  landmark: String
   phoneNumber: Int
   pincode: Int
   state: String
@@ -208,6 +216,7 @@ type User {
 
 input UserUniqueInput {
   email: String!
+  id: ID!
   name: String!
   phoneNumber: Int
 }

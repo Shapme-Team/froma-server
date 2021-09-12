@@ -1,6 +1,6 @@
 import { extendType, intArg, nonNull, queryField, stringArg } from 'nexus'
 import { context } from '../context'
-import { Cart, Category, Order, Product, Seller, SubCategory, User } from 'nexus-prisma'
+import { Address, Cart, Category, Order, Product, Seller, SubCategory, User } from 'nexus-prisma'
 import { extendSchema } from 'graphql'
 
 export const getUsersQuery = extendType({
@@ -73,12 +73,36 @@ export const getUsersQuery = extendType({
           })
         },
       })
-
-
-
+      t.field('getAddressByAddressId',{
+        type: Address.$name,
+        args: {
+          addressId: nonNull(stringArg())
+        },
+        resolve: (parent, args, ctx) => {
+          return ctx.prisma.address.findFirst({
+            where: {
+              id: args.addressId
+            }
+          })
+        },
+      })
 
     //* ---------------------------- MULTI QUERIES
     //* ---------------------------- with conditions 
+
+    t.list.field('getAddressByUserId',{
+      type: Address.$name,
+      args: {
+        userId: nonNull(stringArg()),
+      },
+      resolve: (parent,args,ctx) => {
+        return ctx.prisma.address.findMany({
+          where:{
+            userId: args.userId
+          }
+        })
+      }
+    })
 
 
 
@@ -153,20 +177,6 @@ export const getUsersQuery = extendType({
         })
       },
     })
-    // t.list.field('getPopularOrders', {
-    //   type: Product.$name,
-    //   args: {
-    //     productLimit: nonNull(intArg())
-    //   },
-    //   resolve: (parent, args, ctx) => {
-    //     return ctx.prisma.product.findMany({
-    //       where: {
-    //         categoryId: args.categoryId
-    //       },
-    //       take: args.productLimit
-    //     })
-    //   },
-    // })
     t.list.field('getProdutsBySubCategoryId', {
       type: Product.$name,
       args: {

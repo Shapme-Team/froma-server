@@ -31,6 +31,16 @@ export const createMutation = extendType({
         ),
       },
       async resolve(parent, args, ctx) {
+        var existingUser = await ctx.prisma.user.findFirst({
+          where:{
+            id: args.userUniqueInput.id
+          }
+        })
+        // user already exist, it might just be a signin
+        if(existingUser != undefined) return existingUser ;
+
+
+
         var userModel = await ctx.prisma.user.create({
           data: {
             id: args.userUniqueInput.id,

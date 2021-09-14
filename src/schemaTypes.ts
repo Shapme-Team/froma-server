@@ -28,20 +28,32 @@ const UserTypes = objectType({
     t.list.field('address', {
       type: Address.$name,
       resolve: (parent, _, ctx) => {
-        return ctx.prisma.address.findMany()
+        return ctx.prisma.address.findMany({
+          where: {
+            userId: parent.id,
+          },
+        })
       },
     })
     t.list.field('orders', {
       type: Order.$name,
       resolve: (parent, _, ctx) => {
-        return ctx.prisma.order.findMany()
+        return ctx.prisma.order.findMany({
+          where: {
+            userId: parent.id,
+          },
+        })
       },
     })
 
     t.field('cart', {
       type: Cart.$name,
       resolve: (parent, _, ctx: Context) => {
-        return ctx.prisma.cart.findFirst()
+        return ctx.prisma.cart.findFirst({
+          where:{
+            userId: parent.id
+          }
+        })
       },
     })
   },
@@ -96,14 +108,22 @@ const CartType = objectType({
     t.field('user', {
       type: User.$name,
       resolve: (parent, _, ctx) => {
-        return ctx.prisma.user.findFirst()
+        return ctx.prisma.user.findFirst({
+          where:{
+            id: parent.userId ?? undefined
+          }
+        })
       },
     })
 
     t.list.field('products', {
       type: CartProduct.$name,
       resolve: (parent, _, ctx) => {
-        return ctx.prisma.cartProduct.findMany()
+        return ctx.prisma.cartProduct.findMany({
+          where: {
+            cartId: parent.id
+          }
+        })
       },
     })
   },
@@ -132,7 +152,11 @@ const OrderType = objectType({
     t.list.field('products', {
       type: CartProduct.$name,
       resolve: (parent, _, ctx) => {
-        return ctx.prisma.cartProduct.findMany()
+        return ctx.prisma.cartProduct.findMany({
+          where:{
+            orderId: parent.id
+          }
+        })
       },
     })
 
@@ -158,15 +182,15 @@ const CartProductType = objectType({
     t.field(CartProduct.cartId)
     t.field(CartProduct.quantity)
 
-    t.field('cart',{
+    t.field('cart', {
       type: Cart.$name,
       resolve: (parent, _, ctx) => {
         return ctx.prisma.cart.findFirst({
           where: {
             id: parent.cartId ?? undefined,
-          }
+          },
         })
-      }
+      },
     })
 
     t.field('order', {
@@ -203,7 +227,11 @@ const SellerType = objectType({
     t.list.field('products', {
       type: Product.$name,
       resolve(parent, arg, ctx) {
-        return ctx.prisma.product.findMany()
+        return ctx.prisma.product.findMany({
+          where:{
+            sellerId:parent.id
+          }
+        })
       },
     })
   },
@@ -245,8 +273,8 @@ const ProductType = objectType({
       resolve(parent, arg, ctx) {
         return ctx.prisma.category.findFirst({
           where: {
-            id: parent.categoryId ?? undefined
-          }
+            id: parent.categoryId ?? undefined,
+          },
         })
       },
     })
@@ -262,17 +290,14 @@ const ProductType = objectType({
       },
     })
 
-    t.list.field('carts', {
+    t.list.field('cartProduct', {
       type: Cart.$name,
       resolve(parent, arg, ctx) {
-        return ctx.prisma.cart.findMany()
-      },
-    })
-
-    t.list.field('orders', {
-      type: Order.$name,
-      resolve: (parent, arg, ctx: Context) => {
-        return ctx.prisma.order.findMany()
+        return ctx.prisma.cartProduct.findMany({
+          where:{
+            productId: parent.id
+          }
+        })
       },
     })
   },
@@ -288,9 +313,9 @@ const CategoryType = objectType({
       type: SubCategory.$name,
       resolve(parent, arg, ctx) {
         return ctx.prisma.subCategory.findMany({
-          where:{
-            categoryid: parent.id
-          }
+          where: {
+            categoryid: parent.id,
+          },
         })
       },
     })
@@ -298,9 +323,9 @@ const CategoryType = objectType({
       type: Product.$name,
       resolve: async (parent, _, ctx: Context) => {
         return ctx.prisma.product.findMany({
-          where:{
-            categoryId: parent.id
-          }
+          where: {
+            categoryId: parent.id,
+          },
         })
       },
     })
@@ -328,16 +353,14 @@ const SubCategoryType = objectType({
       type: Product.$name,
       resolve(parent, arg, ctx: Context) {
         return ctx.prisma.product.findMany({
-          where:{
-            subCategoryId: parent.id
-          }
+          where: {
+            subCategoryId: parent.id,
+          },
         })
       },
     })
   },
 })
-
-
 
 // todo ----------- QUERIES AND MUTATIONS  --------------------
 // todo ----------- QUERIES AND MUTATIONS  --------------------

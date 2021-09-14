@@ -102,13 +102,12 @@ input OrderInputType {
 
 type Product {
   availability: Boolean
-  carts: [Cart]
+  cartProduct: [Cart]
   category: Category
   categoryId: String
   description: String!
   id: ID!
   imageUrl: String!
-  orders: [Order]
   price: Int
   seller: Seller
   sellerId: String
@@ -144,6 +143,7 @@ type Query {
   getAllSellers: [Seller]
   getAllUsers: [User]
   getCartByUserId(userId: String!): Cart
+  getCategoryByCategoryId(categoryId: String!): Category
   getOrderByOrderId(orderId: String!): Order
   getOrdersByUserId(userId: String!): [Order]
   getProductByProductId(productId: String!): Product
@@ -152,7 +152,6 @@ type Query {
   getProdutsByCategoryIds(categoryId: String!, cursorId: String, limit: Int): [Product]
   getProdutsBySubCategoryId(cursorId: String, limit: Int, subCategoryId: String!): [Product]
   getSellerBySellerId(sellerId: String!): Seller
-  getSubCategoriesByCategoryId(categoryId: String!): [SubCategory]
   getUserByUserId(userId: String!): User
 }
 

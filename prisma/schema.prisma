@@ -98,7 +98,7 @@ model Product {
   // ---------- product extra references ------
   // cart ---- relation
   // order ---- relation
-  CartProduct CartProduct[]
+  cartProduct CartProduct[]
 }
 
 /// product model with quantity information

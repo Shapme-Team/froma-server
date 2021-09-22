@@ -70,12 +70,14 @@ type Mutation {
   createUserData(userUniqueInput: UserUniqueInput!): User
   deleteCartProduct(cartProudctId: String!): Cart
   deleteCategory(categoryId: String!): Category
+  deleteOrderByOrderId(orderId: String!): Order
   deleteProductById(productId: String!): Product
   deleteSubCategory(subCategoryId: String!): SubCategory
   deleteUser(userId: String!): User
   deleteUserAddress(addressId: String!): Address
   updateCartProductQuantity(id: ID!, quantity: Int!): CartProduct
   updateCategoryName(categoryId: String!, categoryName: String!): Category
+  updateOrderPaymentStatus(orderId: String!, status: String!, userId: String!): Order
   updateProductDetails(productArg: UpdateProductInput!, productId: String!): Product
   updateSubCategoryName(subCategoryId: String!, subCategoryName: String!): SubCategory
   updateUserAddress(addressArg: UpdateAddressInput!): Address
@@ -87,7 +89,9 @@ type Order {
   createdAt: DateTime!
   id: ID!
   orderAddress: Address
+  orderStatus: String
   paymentMethod: String!
+  paymentStatus: String
   products: [CartProduct]
   user: User
   userId: String
@@ -95,7 +99,10 @@ type Order {
 
 input OrderInputType {
   addresId: String
+  id: ID!
+  orderStatus: String
   paymentMethod: String!
+  paymentStatus: String
   productIds: [String!]!
   userId: String
 }

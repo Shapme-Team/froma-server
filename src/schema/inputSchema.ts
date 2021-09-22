@@ -61,9 +61,12 @@ export const ProductInputType = inputObjectType({
 export const OrderInputType = inputObjectType({
   name: 'OrderInputType',
   definition(t) {
+    t.nonNull.field(Order.id)
     t.nonNull.field(Order.paymentMethod)
     t.field(Order.addresId)
     t.field(Order.userId)
+    t.field(Order.paymentStatus)
+    t.field(Order.orderStatus)
     t.nonNull.list.nonNull.field('productIds',{
       type: 'String'
     })

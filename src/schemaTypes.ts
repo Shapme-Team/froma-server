@@ -135,10 +135,11 @@ const OrderType = objectType({
     t.field(Order.id)
     t.field(Order.paymentMethod)
     t.field(Order.createdAt)
+    t.field(Order.paymentStatus)
 
     t.field(Order.addresId)
     t.field(Order.userId)
-
+    t.field(Order.orderStatus)
     t.field('user', {
       type: User.$name,
       resolve: (parent, args, ctx) => {

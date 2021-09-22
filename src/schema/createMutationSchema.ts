@@ -205,20 +205,24 @@ export const createMutation = extendType({
 
         // removing cartproducts from cart after order is placed
         // by setting cartId to -> null
-        await ctx.prisma.cartProduct.updateMany({
-          where: {
-            id: {
-              in: args.orderUniqueInput.productIds,
-            },
-          },
-          data: {
-            cartId: null,
-          },
-        })
+        // await ctx.prisma.cartProduct.updateMany({
+        //   where: {
+        //     id: {
+        //       in: args.orderUniqueInput.productIds,
+        //     },
+        //   },
+        //   data: {
+        //     cartId: null,
+        //   },
+        // })
+
         return ctx.prisma.order.create({
           data: {
+            id: args.orderUniqueInput?.id,
             addresId: args.orderUniqueInput?.addresId,
             paymentMethod: args.orderUniqueInput?.paymentMethod,
+            paymentStatus:args.orderUniqueInput?.paymentStatus,
+            orderStatus:args.orderUniqueInput?.orderStatus,
             userId: args.orderUniqueInput?.userId,
             cartProducts: {
               connect: connectMap,

@@ -5,6 +5,8 @@
     "esModuleInterop": true,
     "lib": ["esnext"],
     "strict": true,
+    "allowJs": true,
+    "noImplicitAny": false
   },
   "include": ["src/**/*", "schema-default.ts"]
 }

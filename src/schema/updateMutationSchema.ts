@@ -4,6 +4,7 @@ import {
   Cart,
   CartProduct,
   Category,
+  Order,
   Product,
   Seller,
   SubCategory,
@@ -78,8 +79,12 @@ export const updateMutation = extendType({
             landmark: args.addressArg.landmark,
           }),
           ...(args.addressArg.area && { area: args.addressArg.area }),
-          ...(args.addressArg.houseNumber && { houseNumber: args.addressArg.houseNumber }),
-          ...(args.addressArg.fullName && { fullName: args.addressArg.fullName }),
+          ...(args.addressArg.houseNumber && {
+            houseNumber: args.addressArg.houseNumber,
+          }),
+          ...(args.addressArg.fullName && {
+            fullName: args.addressArg.fullName,
+          }),
           ...(args.addressArg.state && { state: args.addressArg.state }),
           ...(args.addressArg.phoneNumber && {
             phoneNumber: args.addressArg.phoneNumber,
@@ -162,9 +167,49 @@ export const updateMutation = extendType({
           where: {
             id: args.categoryId,
           },
-          data:{
-            name: args.categoryName
-          } 
+          data: {
+            name: args.categoryName,
+          },
+        })
+      },
+    })
+
+    t.field('updateOrderPaymentStatus', {
+      type: Order.$name,
+      args: {
+        orderId: nonNull(stringArg()),
+        status: nonNull(stringArg()),
+        userId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, ctx) => {
+        var cartData = await ctx.prisma.cart.findFirst({
+          where: {
+            userId: args.userId,
+          },
+        })
+        console.log('---------> cart id: ',cartData?.id)
+
+        await ctx.prisma.cart.update({
+          where: {
+            id: cartData?.id,
+          },
+          data: {
+            products: {
+              set:[],
+            },
+          },
+        })
+
+        // removing cartproducts from cart after order is placed
+        // by setting cartId to -> null
+
+        return ctx.prisma.order.update({
+          where: {
+            id: args.orderId,
+          },
+          data: {
+            paymentStatus: args.status,
+          },
         })
       },
     })
@@ -179,9 +224,9 @@ export const updateMutation = extendType({
           where: {
             id: args.subCategoryId,
           },
-          data:{
-            name: args.subCategoryName
-          }
+          data: {
+            name: args.subCategoryName,
+          },
         })
       },
     })

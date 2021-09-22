@@ -3,6 +3,7 @@ import {
   Address,
   Cart,
   Category,
+  Order,
   Product,
   SubCategory,
   User,
@@ -48,6 +49,19 @@ export const deleteMutation = extendType({
         return ctx.prisma.cartProduct.delete({
           where: {
             id: args.cartProudctId,
+          },
+        })
+      },
+    })
+    t.field('deleteOrderByOrderId', {
+      type: Order.$name,
+      args: {
+        orderId: nonNull(stringArg()),
+      },
+      resolve: (parent, args, ctx) => {
+        return ctx.prisma.order.delete({
+          where: {
+            id: args.orderId,
           },
         })
       },

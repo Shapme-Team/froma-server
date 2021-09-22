@@ -48,11 +48,13 @@ model Cart {
 }
 
 model Order {
-  id            String   @id @default(cuid())
-  paymentMethod String
+  id            String   @id 
   createdAt     DateTime @default(now())
 
   cartProducts CartProduct[]
+  orderStatus String?
+  paymentMethod String
+  paymentStatus String?
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?

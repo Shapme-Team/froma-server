@@ -136,6 +136,7 @@ const OrderType = objectType({
     t.field(Order.paymentMethod)
     t.field(Order.createdAt)
     t.field(Order.paymentStatus)
+    t.field(Order.amount)
 
     t.field(Order.addresId)
     t.field(Order.userId)

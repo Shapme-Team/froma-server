@@ -16,7 +16,7 @@ model User {
   id          String    @id
   name        String
   email       String    @unique
-  phoneNumber Int?
+  phoneNumber String?
   address     Address[]
   orders      Order[]
   cart        Cart?
@@ -26,7 +26,7 @@ model Address {
   id String @id @default(cuid())
 
   city        String
-  phoneNumber Int
+  phoneNumber String
   state       String
   pincode     Int
   landmark    String?
@@ -61,14 +61,14 @@ model Order {
 
   orderAddress Address? @relation(fields: [addresId], references: [id])
   addresId     String?
-
+  amount Float?
 }
 
 model Seller {
   id          String    @id
   email       String    @unique
   name        String?
-  phoneNumber Int
+  phoneNumber String?
   products    Product[]
 }
 
@@ -83,7 +83,7 @@ model Product {
   unit          String       @default("gm")
   // quantity      Int          @default(1)
   weight        Int?
-  price         Int?         @default(10)
+  price         Float
   // category ---- relation
   category      Category?    @relation(fields: [categoryId], references: [id])
   categoryId    String?

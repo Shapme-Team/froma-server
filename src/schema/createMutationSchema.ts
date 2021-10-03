@@ -33,7 +33,7 @@ export const createMutation = extendType({
       async resolve(parent, args, ctx) {
         var existingUser = await ctx.prisma.user.findFirst({
           where:{
-            id: args.userUniqueInput.id
+            email: args.userUniqueInput.email
           }
         })
         // user already exist, it might just be a signin
@@ -224,6 +224,7 @@ export const createMutation = extendType({
             paymentStatus:args.orderUniqueInput?.paymentStatus,
             orderStatus:args.orderUniqueInput?.orderStatus,
             userId: args.orderUniqueInput?.userId,
+            amount: args.orderUniqueInput?.amount,
             cartProducts: {
               connect: connectMap,
             },

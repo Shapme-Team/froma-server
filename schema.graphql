@@ -10,7 +10,7 @@ type Address {
   id: ID!
   landmark: String
   orders: [Order]
-  phoneNumber: Int!
+  phoneNumber: String!
   pincode: Int!
   state: String!
   user: User
@@ -23,7 +23,7 @@ input AddressInputType {
   fullName: String!
   houseNumber: String!
   landmark: String
-  phoneNumber: Int!
+  phoneNumber: String!
   pincode: Int!
   state: String!
   userId: String
@@ -86,6 +86,7 @@ type Mutation {
 
 type Order {
   addresId: String
+  amount: Float
   createdAt: DateTime!
   id: ID!
   orderAddress: Address
@@ -99,6 +100,7 @@ type Order {
 
 input OrderInputType {
   addresId: String
+  amount: Float
   id: ID!
   orderStatus: String
   paymentMethod: String!
@@ -115,7 +117,7 @@ type Product {
   description: String!
   id: ID!
   imageUrl: String!
-  price: Int
+  price: Float!
   seller: Seller
   sellerId: String
   stockQuantity: Int!
@@ -132,7 +134,7 @@ input ProductInputType {
   categoryId: String
   description: String!
   imageUrl: String!
-  price: Int
+  price: Float!
   sellerId: String
   stockQuantity: Int!
   subCategoryId: String
@@ -166,7 +168,7 @@ type Seller {
   email: String!
   id: ID!
   name: String
-  phoneNumber: Int!
+  phoneNumber: String
   products: [Product]
 }
 
@@ -174,7 +176,7 @@ input SellerInputType {
   email: String!
   id: ID!
   name: String!
-  phoneNumber: Int!
+  phoneNumber: String!
 }
 
 type SubCategory {
@@ -192,7 +194,7 @@ input UpdateAddressInput {
   houseNumber: String
   id: ID!
   landmark: String
-  phoneNumber: Int
+  phoneNumber: String!
   pincode: Int
   state: String
 }
@@ -217,18 +219,18 @@ type User {
   id: ID!
   name: String!
   orders: [Order]
-  phoneNumber: Int
+  phoneNumber: String
 }
 
 input UserUniqueInput {
   email: String!
   id: ID!
   name: String!
-  phoneNumber: Int
+  phoneNumber: String
 }
 
 input UserUpdateInputType {
   id: ID!
   name: String
-  phoneNumber: Int
+  phoneNumber: String
 }

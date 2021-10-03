@@ -67,6 +67,7 @@ export const OrderInputType = inputObjectType({
     t.field(Order.userId)
     t.field(Order.paymentStatus)
     t.field(Order.orderStatus)
+    t.field(Order.amount)
     t.nonNull.list.nonNull.field('productIds',{
       type: 'String'
     })
@@ -79,7 +80,7 @@ export const UserUpdateInputType = inputObjectType({
   definition(t) {
     t.nonNull.field(User.id)
     t.string(User.name.name)
-    t.int(User.phoneNumber.name)
+    t.field(User.phoneNumber)
   },
 })
 export const UpdateAddressInput = inputObjectType({
@@ -93,7 +94,7 @@ export const UpdateAddressInput = inputObjectType({
     t.string(Address.area.name)
     t.string(Address.houseNumber.name)
     t.int(Address.pincode.name)
-    t.int(Address.phoneNumber.name)
+    t.field(Address.phoneNumber)
 
   },
 })

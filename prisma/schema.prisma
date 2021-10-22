@@ -3,8 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  // provider = "sqlite"
+  provider = "postgresql"
+  // url      = "file:./dev.db"
+  url      = "postgresql://user:password@postgres:5432/postgresdb?schema=public"
+  // url      = "postgresql://user:password@localhost:5432/postgresdb?schema=public"
+  // url      = "postgresql://postgres:password@localhost:5433/postgres?schema=public"
 }
 
 generator nexusPrisma {

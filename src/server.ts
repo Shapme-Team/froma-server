@@ -14,10 +14,8 @@ app.use(cors())
 
 const router = express.Router()
 
-router.use('/payments',PaymentRoute)
+router.use('/payments', PaymentRoute)
 app.use(router)
-
-
 
 // const app = express()
 const server = new ApolloServer({
@@ -25,7 +23,7 @@ const server = new ApolloServer({
   context: context,
 })
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
   res.send('rest/express is working')
 })
 
@@ -46,5 +44,19 @@ async function startApolloServer() {
     }),
   )
 }
+var retries = 5
 
-startApolloServer()
+async function startServer() {
+  while (retries) {
+    try {
+      await startApolloServer()
+      break;
+    } catch (error) {
+      console.log('error with starting server: ', error)
+      retries -= 1
+      console.log(`retries left: ${retries}`)
+      await new Promise((res) => setTimeout(res, 5000))
+    }
+  }
+}
+startServer()

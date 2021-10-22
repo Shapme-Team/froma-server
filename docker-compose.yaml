@@ -1,0 +1,29 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    restart: "always"
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgresdb
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  app:
+    image: fromaserver
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - '4000:4000'
+  # migrate: 
+  #   build: .
+  #   image: fromaserver
+  #   command: npx prisma migrate deploy
+  #   links:
+  #     - postgres
+  #   depends_on:
+  #     - postgres

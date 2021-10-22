@@ -6,7 +6,10 @@
     "lib": ["esnext"],
     "strict": true,
     "allowJs": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "module": "CommonJS",
+    "skipLibCheck": true
+
   },
   "include": ["src/**/*", "schema-default.ts"]
 }

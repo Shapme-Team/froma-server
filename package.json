@@ -3,12 +3,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
-    "start": "node dist/server",
-    "clean": "rm -rf dist",
-    "build": "npm -s run clean && npm -s run generate && tsc",
+    "start": "npm run migrate && node dist/server",
+    "clean": "rd /s /q dist",
+    "build": "npm -s run generate && tsc",
+    "build-dev": "npm -s run clean && npm -s run generate && tsc",
     "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
     "generate:prisma": "prisma generate",
-    "generate:nexus": "ts-node --transpile-only src/schema"
+    "generate:nexus": "ts-node --transpile-only src/schema",
+    "migrate":"prisma migrate dev"
   },
   "prettier": {
     "semi": false,
@@ -17,6 +19,9 @@
   },
   "dependencies": {
     "@prisma/client": "^2.27.0",
+    "@types/cors": "^2.8.12",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.13",
     "@types/formidable": "^1.2.4",
     "apollo-server": "2.25.2",
     "apollo-server-core": "^2.25.2",
@@ -29,14 +34,14 @@
     "formidable": "^1.2.2",
     "graphql": "15.5.1",
     "graphql-scalars": "1.10.0",
-    "nexus": "1.1.0",
+    "nexus": "^1.1.0",
     "nexus-prisma": "^0.30.0"
   },
   "devDependencies": {
     "@types/node": "^14.17.9",
-    "prisma": "^2.29.1",
+    "prisma": "^2.27.0",
     "ts-node": "10.2.0",
     "ts-node-dev": "1.1.8",
-    "typescript": "4.3.5"
+    "typescript": "^4.3.5"
   }
 }
